@@ -86,6 +86,23 @@ this绑定规则
    其作用和bind()一样，确保回调函数使用指定的this；
 
 4.new绑定
-   
+   new函数调用函数事自动执行的操作：
+    1.创建一个全新的对象；
+    2.新对象被执行[[Prototype]]连接；
+    3.新对象绑定到函数调用的this；
+    4.如果函数没有返回其他对象，new表达式中的函数调用会自动返回这个新对象；
+   例：
+     function foo(a){
+        this.a=a;
+       }
+     var bar = new foo(2);
+     console.log(bar.a);//2
+   使用new调用foo(...)时，会构造一个新对象并把它绑定到foo(...)调用中的this上；
+  
+  根据优先级判断this
+   1.如果函数在new中调用(new绑定)，this绑定的是新创建的对象；var bar = new foo()
+   2.如果函数通过call、apply(显示绑定)或者硬绑定调用，this绑定的时指定的对象；var bar = foo.call(obj2)
+   3.如果函数在某个上下文对象中调用（隐式绑定），this绑定的是上下文对象；var bar = boj1.foo()
+   4.如果都不是则使用默认绑定，严格模式绑定到undefined，非严格模式绑定到全局对象；var bar = foo()
   
    
