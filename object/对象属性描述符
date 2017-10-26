@@ -1,0 +1,69 @@
+对象有三个属性描述符：
+   writable:可写；
+   enumerable：可枚举；
+   configurable：可配置；
+  
+  1.writable
+    writable设置为true时，可以修改属性值，false时不可修改属性的值；
+    例：
+    var myObject = {};
+    Object.defineProperty(myObject,'a',{
+        value:2,
+        writable:fasle,
+        configurable:true,
+        enumerable:true
+      });
+    myObject.a = 3;
+    myObject.a;//2
+    如果是在严格模式下上述情况会报错；
+  
+  2.configurable
+    configurable设置为true时，可以配置属性，使用defineProperty()方法可以修改属性描述符（一般情况下不适用这种方法）；
+    例：
+    var myObject = {};
+    Object.defineProperty(myObject,'a',{
+        value:4,
+        writable:true,
+        configurable:fasle,
+        enumerable:true
+      });
+    myObject.a;//4
+    myObject.a=5;
+    myObject.a;//5
+    Object.defineProperty(myObject,'a',{
+        value:4,
+        writable:true,
+        configurable:true,
+        enumerable:true
+      });//TypeError
+    把configurable修改成false是单向操作，无法撤销；
+    例外：在configurable:true的情况下，writable的值可以由true改为false，无法由false改为true；
+    configurable:false时属性不可以被删除；
+  
+  3.enumerable
+    控制属性是否出现在对象的属性枚举中，当设为false时，属性不能出现在枚举中 ，例如for..in循环，但是仍然可以正常访问，如果设为true则可以枚举；
+    
+不变性：
+  所有方法创建的都是浅不变性，他们只会影响目标对象和它的直接属性，如果目标对象引用了其他对象，其他对象的内容不受影响，仍然可变；
+  Object.preventExtensions():禁止对象添加新属性且保留已有属性；
+  例：
+  var myObject = {
+     a:2
+   };
+   object.perventExtensions(myObject);
+   myObject.b = 3;
+   myObject.b;//undefined
+
+存在性：
+  in操作符会检查属性是否在对象及其原型链中；hasOwnProperty只会检查属性是否在当前对象中，不检查原型链；
+  
+遍历：
+  for..in循环可以遍历对象可枚举属性列表；
+  forEach(...)遍历数组中的所有值并忽略回调函数的返回值；
+  every(...)会一直运行到它所接收的回调函数返回false；
+  some(...)一直运行到回调函数返回true；
+  for...of遍历对象的所有值；
+  
+    
+    
+      
