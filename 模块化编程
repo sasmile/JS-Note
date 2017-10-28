@@ -1,0 +1,118 @@
+JS模块基本写法：
+var module1 = (function(){
+
+　　　　var _count = 0;
+
+　　　　var m1 = function(){
+　　　　　　//...
+　　　　};
+
+　　　　var m2 = function(){
+　　　　　　//...
+　　　　};
+
+　　　　return {
+　　　　　　m1 : m1,
+　　　　　　m2 : m2
+　　　　};
+
+
+　　})();
+宽放大模式（用于较大模块，或模块中需要其他模块，相对较大模式，立即执行函数的参数可以是空对象）
+ 
+ var module1 = ( function (mod){
+　　　　//...
+　　　　return mod;
+　　})(window.module1 || {});
+AMD规范，异步模块定义，采用异步方式加载模块，不影响后面语句的运行，所有依赖这个模块的语句都放入回调函数中，加载完毕后执行回调函数；
+AMD采用require(),全局性方法，加载模块；
+require([module],callback)
+module:一个数组，要加载的模块；
+callback：要执行的回调函数，加载的模块以参数形式传入函数；
+
+模块化编程实际应用
+调用require.js库，调用时添加async（IE加上defer）,表示异步加载：
+<script src="js/require.js" defer async="true" ></script>
+data-main：指定程序的主模块，
+<script src="js/require.js" data-main="js/main"></script>
+
+
+加载模块实例：
+  require(['jquery', 'underscore', 'backbone'], function ($, _, Backbone){
+　　　　// some code here
+　　});
+
+自定义模块加载形式：
+require.config()方法，写在主模块头部，参数是一个对象，参数的paths属性指定各个模块的加载路径；
+加载模块与主模块路径相同：
+  require.config({
+　　　　paths: {
+　　　　　　"jquery": "jquery.min",
+　　　　　　"underscore": "underscore.min",
+　　　　　　"backbone": "backbone.min"
+　　　　}
+　　});
+
+加载模块与主模块路径不同：
+  逐一指定路径：
+    require.config({
+
+　　　　paths: {
+　　　　　　"jquery": "lib/jquery.min",
+　　　　　　"underscore":"lib/underscore.min",
+　　　　　　"backbone": "lib/backbone.min"
+    }
+});
+
+直接改变基目录（baseUrl）：
+  require.config({
+　　　　baseUrl: "js/lib",
+　　　　paths: {
+　　　　　　"jquery": "jquery.min",
+　　　　　　"underscore": "underscore.min",
+　　　　　　"backbone": "backbone.min"
+　　　　}
+　　});
+
+require.js要求每个模块是一个JS文件；
+require.js加载的模块必须按AMD规范编写；
+模块采用特定的define()函数定义；
+1.模块不依赖其他模块，可以直接在define（）中定义：
+
+　　// math.js
+     define(function (){
+　　　　var add = function (x,y){
+　　　　　　return x+y;
+　　　　};
+　　　　return {
+　　　　　　add: add
+　　　　};
+　　});
+
+ 2.模块依赖其他模块，define（）函数第一个参数为数组，指明模块依赖性：
+　define(['myLib'], function(myLib){
+
+　　　　function foo(){
+
+        myLib.doSomething();
+　　　　}
+　　　　return {
+　　　　　　foo : foo
+　　　　};
+　　});
+ 加载此模块时会先加载mylib模块；
+require.config()的shim属性可配置不兼容模块，每个模块需要定义exports值（输出的变量名，表明这个模块外部调用的名称），deps数组（表明该模块依赖性）；
+
+　　require.config({
+       shim: {
+　　　　　　'underscore':{
+　　　　　　　　exports: '_'
+　　　　　　},
+
+　　　　　　'backbone': {
+　　　　　　　　deps: ['underscore', 'jquery'],
+　　　　　　　　exports: 'Backbone'
+　　　　　　}
+　　　　}
+　　});
+
