@@ -1,0 +1,10 @@
+1.typeof 
+ 检测基本数据类型；
+ ps：typeof null == object;
+2.instanceof
+ obj instanceof Object
+ 左操作数为对象，如果用在基本类型上，会返回false；右操作数应该为函数对象或函数构造器，否则抛出typeerror；
+ 用于判断某个变量是否是某个对象的实例；
+3.Object.prototype.toString()
+ 
+  
