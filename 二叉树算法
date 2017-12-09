@@ -5,3 +5,160 @@
 删除节点：
  如果要删除的节点只含有左子树，则节点被删除后原来指向这个节点的箭头指向这个节点的左子树；
  如果要删除的节点只含有右子树，则节点被删除后原来指向这个节点的箭头指向这个节点的右子树；
+window.onload = function () {
+    function BinaryTree() {
+        //创建节点函数
+        var Node = function (key) {
+            this.key = key;
+            this.left = null;
+            this.right = null;
+        };
+        //创建一个空节点
+        var root = null;
+        var insertNode = function (node, newNode) {
+            if (newNode.key < node.key) {
+                if (node.left === null) {
+                    node.left = newNode;
+                } else {
+                    insertNode(node.left, newNode);
+                }
+            } else {
+                if (node.right === null) {
+                    node.right = newNode;
+                } else {
+                    insertNode(node.right, newNode);
+                }
+            }
+        }
+        //创建一个用于插入节点的函数
+        this.insert = function (key) {
+            //创建一个节点
+            var newNode = new Node(key);
+            if (root === null) {
+                root = newNode;
+            } else {
+                insertNode(root, newNode);
+            }
+        }
+        //中序遍历
+        var inOrderTraverseNode = function (node, callback) {
+            if (node !== null) {
+                inOrderTraverseNode(node.left, callback);
+                callback(node.key);
+                inOrderTraverseNode(node.right, callback);
+            }
+        }
+        this.inOrderTraverse = function (callback) {
+            inOrderTraverseNode(root, callback);
+        }
+        //前序遍历
+        var preOrderTraverseNode = function (node, callback) {
+            if (node !== null) {
+                callback(node.key);
+                preOrderTraverseNode(node.left, callback);
+                preOrderTraverseNode(node.right, callback);
+            }
+        }
+        this.preOrderTraverse = function (callback) {
+            preOrderTraverseNode(root, callback);
+        }
+        //后序遍历
+        var postOrderTraverseNode = function (node, callback) {
+            if (node !== null) {
+                postOrderTraverseNode(node.left, callback);
+                postOrderTraverseNode(node.right, callback);
+                callback(node.key);
+            }
+        }
+        this.postOrderTraverse = function (callback) {
+            postOrderTraverseNode(root, callback);
+        }
+        //查找最小数
+        var minNode = function (node) {
+            if (node) {
+                while (node && node.left !== null) {
+                    node = node.left;
+                }
+                return node.key;
+            }
+            return null;
+        }
+        this.min = function () {
+            return minNode(root);
+        }
+        //查找最大数
+        var maxNode = function (node) {
+            if (node) {
+                while (node && node.right !== null) {
+                    node = node.right;
+                }
+                return node.key;
+            }
+            return null;
+        }
+        this.max = function () {
+            return maxNode(root);
+        }
+        //查找指定数
+        var searchNode = function (node, key) {
+            if (node === null) {
+                return false;
+            }
+            if (key < node.key) {
+                return searchNode(node.left, key);
+            } else if (key > node.key) {
+                return searchNode(node.right, key);
+            } else {
+                return true;
+            }
+        }
+        this.search = function (key) {
+            return searchNode(root, key);
+        }
+        var removeNode = function (node, key) {
+            if (node === null) {
+                return null;
+            }
+            if (key < node.key) {
+                node.left = removeNode(node.left, key);
+                return node;
+            } else if (key > node.key) {
+                node.right = removeNode(node.right, key);
+                return node;
+            } else {
+                if (node.left === null && node.right === null) {
+                    node = null;
+                    return node;
+                }
+                if (node.left === null) {
+                    node = node.right;
+                    return node;
+                } else if (node.right === null) {
+                    node = node.left;
+                    return node;
+                }
+            }
+        }
+        this.remove = function (key) {
+            root = removeNode(root,key);
+        }
+    }
+        var nodes = [8, 3, 10, 1, 6, 14, 4, 7, 13];
+        var binaryTree = new BinaryTree();
+        //把数组中的数值插入二叉树
+        nodes.forEach(function (key) {
+            binaryTree.insert(key);
+        });
+        var callback = function (key) {
+            console.log(key);
+        }
+
+        // binaryTree.postOrderTraverse(callback); 遍历二叉树
+        //输出最小数
+        //console.log("min node is : " + binaryTree.min());
+        //输出最大数
+        //console.log("max node is : " + binaryTree.max());
+        //输出指定数
+        //console.log(binaryTree.search(7) ? 'key 7 is found' : 'key 7 is not found');
+        binaryTree.remove(6);
+}
